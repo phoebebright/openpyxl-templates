@@ -9,6 +9,7 @@ from openpyxl_templates.templated_sheet import TemplatedWorksheet
 from openpyxl_templates.utils import OrderedType, Typed
 
 
+
 class SheetnamesNotUnique(OpenpyxlTemplateException):
     def __init__(self, templated_workbook):
         super(SheetnamesNotUnique, self).__init__(
@@ -93,8 +94,7 @@ class TemplatedWorkbook(metaclass=OrderedType):
             del self.workbook[sheetname]
 
     def save(self, filename):
-        if self.timestamp:
-            filename = self.timestamp_filename(filename)
+        filename = self.timestamp_filename(filename)
 
         self.sort_worksheets()
 
@@ -125,15 +125,17 @@ class TemplatedWorkbook(metaclass=OrderedType):
         self.workbook.active = active_index
 
     def timestamp_filename(self, filename):
-        return "%s_%s.%s" % (
-            filename.strip(".%s" % self._file_extension),
-            datetime.now().strftime(
-                self.timestamp
-                if isinstance(self.timestamp, str)
-                else self._default_timestamp
-            ),
-            self._file_extension
-        )
+        if self.timestamp:
+            return "%s_%s.%s" % (
+                filename.strip(".%s" % self._file_extension),
+                datetime.now().strftime(
+                    self.timestamp
+                    if isinstance(self.timestamp, str)
+                    else self._default_timestamp
+                ),
+                self._file_extension
+            )
+        return filename
 
     @property
     def sheetnames(self):
