@@ -2,7 +2,12 @@ from copy import copy
 from datetime import date, datetime, timedelta, time
 from types import FunctionType
 
-from collections import Iterable, defaultdict
+try:
+    from collections.abc import Iterable
+except ImportError:
+    from collections import Iterable
+
+from collections import defaultdict
 from openpyxl.cell import WriteOnlyCell
 from openpyxl.formatting import Rule
 from openpyxl.styles import NamedStyle
